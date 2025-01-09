@@ -175,7 +175,7 @@ public class CharSetUtils {
         if (str == null) {
             return null;
         }
-        if (str.isEmpty() || deepEmpty(set)) {
+        if (str.length() == 0 || deepEmpty(set)) {
             return StringUtils.EMPTY;
         }
         return modify(str, set, true);
