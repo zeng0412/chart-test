@@ -1662,19 +1662,11 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                             boolean notify) {
 
         // stop listening to the existing renderer...
-// start of generated patch
-CategoryItemRenderer existing=(CategoryItemRenderer)this.renderers.get(index);
-if(renderer!=null){
-existing.removeChangeListener(this);
-}
-// end of generated patch
-/* start of original code
         CategoryItemRenderer existing
             = (CategoryItemRenderer) this.renderers.get(index);
         if (existing != null) {
             existing.removeChangeListener(this);
         }
- end of original code*/
 
         // register the new renderer...
         this.renderers.set(index, renderer);
@@ -2241,10 +2233,9 @@ existing.removeChangeListener(this);
      * @return The legend items.
      */
     public LegendItemCollection getLegendItems() {
-        if (this.fixedLegendItems != null) {
-            return this.fixedLegendItems;
-        }
-        LegendItemCollection result = new LegendItemCollection();
+        LegendItemCollection result = this.fixedLegendItems;
+        if (result == null) {
+            result = new LegendItemCollection();
             // get the legend items for the datasets...
             int count = this.datasets.size();
             for (int datasetIndex = 0; datasetIndex < count; datasetIndex++) {
@@ -2252,7 +2243,15 @@ existing.removeChangeListener(this);
                 if (dataset != null) {
                     CategoryItemRenderer renderer = getRenderer(datasetIndex);
                     if (renderer != null) {
-                    result.addAll(renderer.getLegendItems());
+                        int seriesCount = dataset.getRowCount();
+                        for (int i = 0; i < seriesCount; i++) {
+                            LegendItem item = renderer.getLegendItem(
+                                    datasetIndex, i);
+                            if (item != null) {
+                                result.add(item);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -3351,7 +3350,6 @@ existing.removeChangeListener(this);
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         this.annotations.add(annotation);
-        annotation.addChangeListener(this);
         if (notify) {
             fireChangeEvent();
         }

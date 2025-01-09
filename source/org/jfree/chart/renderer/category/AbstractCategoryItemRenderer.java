@@ -2,7 +2,7 @@
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *
- * (C) Copyright 2000-2010, by Object Refinery Limited and Contributors.
+ * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:  http://www.jfree.org/jfreechart/index.html
  *
@@ -27,7 +27,7 @@
  * ---------------------------------
  * AbstractCategoryItemRenderer.java
  * ---------------------------------
- * (C) Copyright 2002-2010, by Object Refinery Limited.
+ * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
@@ -107,7 +107,7 @@
  * 27-Mar-2009 : Added new findRangeBounds() method to account for hidden
  *               series (DG);
  * 01-Apr-2009 : Added new addEntity() method (DG);
- * 09-Feb-2010 : Fixed bug 2947660 (DG);
+ * 26-Jun-2009 : Updated to support selections (DG);
  *
  */
 
@@ -167,7 +167,6 @@ import org.jfree.chart.util.PublicCloneable;
 import org.jfree.chart.util.RectangleAnchor;
 import org.jfree.chart.util.RectangleEdge;
 import org.jfree.chart.util.RectangleInsets;
-import org.jfree.chart.util.SortOrder;
 import org.jfree.data.Range;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CategoryDatasetSelectionState;
@@ -1788,17 +1787,14 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @see #getLegendItem(int, int)
      */
     public LegendItemCollection getLegendItems() {
-        LegendItemCollection result = new LegendItemCollection();
         if (this.plot == null) {
-            return result;
+            return new LegendItemCollection();
         }
+        LegendItemCollection result = new LegendItemCollection();
         int index = this.plot.getIndexOf(this);
         CategoryDataset dataset = this.plot.getDataset(index);
         if (dataset != null) {
-            return result;
-        }
-        int seriesCount = dataset.getRowCount();
-        if (plot.getRowRenderingOrder().equals(SortOrder.ASCENDING)) {
+            int seriesCount = dataset.getRowCount();
             for (int i = 0; i < seriesCount; i++) {
                 if (isSeriesVisibleInLegend(i)) {
                     LegendItem item = getLegendItem(index, i);
@@ -1807,16 +1803,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
                     }
                 }
             }
-        }
-        else {
-            for (int i = seriesCount - 1; i >= 0; i--) {
-                if (isSeriesVisibleInLegend(i)) {
-                    LegendItem item = getLegendItem(index, i);
-                    if (item != null) {
-                        result.add(item);
-                    }
-                }
-            }
+
         }
         return result;
     }

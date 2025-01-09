@@ -110,9 +110,7 @@ public class PieChartDemo1 extends ApplicationFrame {
      */
     public static JPanel createDemoPanel() {
         JFreeChart chart = createChart(createDataset());
-        ChartPanel panel = new ChartPanel(chart);
-        panel.setMouseWheelEnabled(true);
-        return panel;
+        return new ChartPanel(chart);
     }
 
     /**

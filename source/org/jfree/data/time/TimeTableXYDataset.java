@@ -51,7 +51,6 @@
  * 25-Jul-2007 : Added clear() method by Rob Eden, see patch 1752205 (DG);
  * 04-Jun-2008 : Updated Javadocs (DG);
  * 26-May-2009 : Peg to time zone if RegularTimePeriod is used (DG);
- * 02-Nov-2009 : Changed String to Comparable in add methods (DG);
  *
  */
 
@@ -217,9 +216,9 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * @param y  the value for this period.
      * @param seriesName  the name of the series to add the value.
      *
-     * @see #remove(TimePeriod, Comparable)
+     * @see #remove(TimePeriod, String)
      */
-    public void add(TimePeriod period, double y, Comparable seriesName) {
+    public void add(TimePeriod period, double y, String seriesName) {
         add(period, new Double(y), seriesName, true);
     }
 
@@ -233,9 +232,9 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      *                    (<code>null</code> not permitted).
      * @param notify  whether dataset listener are notified or not.
      *
-     * @see #remove(TimePeriod, Comparable, boolean)
+     * @see #remove(TimePeriod, String, boolean)
      */
-    public void add(TimePeriod period, Number y, Comparable seriesName,
+    public void add(TimePeriod period, Number y, String seriesName,
                     boolean notify) {
         // here's a quirk - the API has been defined in terms of a plain
         // TimePeriod, which cannot make use of the timezone and locale
@@ -260,9 +259,9 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      * @param seriesName  the (existing!) series name to remove the value
      *                    (<code>null</code> not permitted).
      *
-     * @see #add(TimePeriod, double, Comparable)
+     * @see #add(TimePeriod, double, String)
      */
-    public void remove(TimePeriod period, Comparable seriesName) {
+    public void remove(TimePeriod period, String seriesName) {
         remove(period, seriesName, true);
     }
 
@@ -276,10 +275,9 @@ public class TimeTableXYDataset extends AbstractIntervalXYDataset
      *                    (<code>null</code> not permitted).
      * @param notify  whether dataset listener are notified or not.
      *
-     * @see #add(TimePeriod, double, Comparable)
+     * @see #add(TimePeriod, double, String)
      */
-    public void remove(TimePeriod period, Comparable seriesName,
-            boolean notify) {
+    public void remove(TimePeriod period, String seriesName, boolean notify) {
         this.values.removeValue(period, seriesName);
         if (notify) {
             fireDatasetChanged(new DatasetChangeInfo());
